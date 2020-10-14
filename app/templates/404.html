@@ -1,0 +1,42 @@
+{#<h1>别瞎访问，没这个页面</h1>#}
+<h1>数据调用出现错误，请检查输入项后再请求数据</h1>
+<a onclick="window.history.go(-1)" href="">返回前一页面~</a>
+
+for (let i in data) {
+    let add_html = '<li>\n' +
+        '                <div style="margin: 0; border: none; background-color: #F2F5F7; margin-top: 10px;" class="col-md-9 col-lg-offset-1">\n' +
+        '                    <hr style="padding: 0">\n' +
+        '                    <div style="margin-top: -18px;">\n' +
+        '                        <div class="col-md-3">\n' +
+        '                            <span style="width: 34px; text-align: right; font-size: 18px; color: #bbb; position: absolute; top: 0; left: 16px;">' + data[i].ranking + '</span>\n' +
+        '                            <img style="width: 100px; height: 148px; margin-left: 50px;" src="' + data[i].img + '">\n' +
+        '                        </div>\n' +
+        '                        <div class="col-md-9">\n' +
+        '                            <div class="hd" style="font-size: 14px; color: #669">\n' +
+        '                                <a href="#" >\n' +
+        '                                    <span>' + data[i].name + '</span>\n' +
+        '                                </a>\n' +
+        '                            </div>\n' +
+        '                            <p></p>\n' +
+        '                            <div class="bd">\n' +
+        '                                <p>' + data[i].human_data + '</p>\n' +
+        '                                <p>' + data[i].release_time + '&nbsp;/&nbsp;' + data[i].show_country + '&nbsp;/&nbsp;' + data[i].type + '</p>\n' +
+        '\n' +
+        '                                <div class="star">\n' +
+        '                                    <span class="rating5-t">评分：</span>\n' +
+        '                                    <span class="rating_num" style="font-size: 12px; color: orange">' + data[i].score + '</span>\n' +
+        '                                    <span style="font-size: 12px; color: orange">&nbsp;&nbsp;&nbsp;&nbsp;' + data[i].evaluators_count + '</span>\n' +
+        '                                    <span>人评价</span>\n' +
+        '                                </div><p></p>\n' +
+        '                                <p class="quote">\n' +
+        '                                    <span class="inq">致语：' + data[i].title + '</span>\n' +
+        '                                </p>\n' +
+        '                            </div>\n' +
+        '                         </div>\n' +
+        '                    </div>\n' +
+        '                </div>\n' +
+        '            </li>'
+    {#const start_html = $('#movie_collection').html()#}
+    $('#movie_collection').append(add_html)
+    console.log(data[i])
+}

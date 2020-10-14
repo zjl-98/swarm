@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='3rd/ui/remodal.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='3rd/ui/remodal-default-theme.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/book-detail.css')}}">
+    <style type="text/css">
+        .label_type {
+            color: #666;
+            font-size: 14px;
+        }
+    .label_data {
+        color: #333;
+        font-size: 14px;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <div class="row">
+        <h3 class="col-md-8 col-lg-offset-1">{{ movie.name }}
+            <span style="color: #888;">({{ movie.time }})</span>
+        </h3>
+        <div>
+            <div class="col-md-8" style="margin-top: 10px;">
+                <div class="col-md-3 col-lg-offset-1">
+                    <img class="book-img" src="{{ movie.img }}" style="width: 135px; height: 200px;"/>
+                </div>
+                <div class="col-md-8" style="line-height: 24px; margin-top: -6px;">
+                    <div>
+                        <span class="label_type">导演: </span>
+                        <span class="label_data">{{ movie.director }}</span>
+                    </div>
+                    {% if movie.screenwriter %}
+                    <div>
+                        <span class="label_type">编剧: </span>
+                        <span class="label_data">{{ movie.screenwriter }}</span>
+                    </div>
+                    {% endif %}
+                    {% if movie.star %}
+                    <div>
+                        <span class="label_type">主演: </span>
+                        <span class="label_data">{{ movie.star }}</span>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <span class="label_type">类型: </span>
+                        <span class="label_data">{{ movie.type }}</span>
+                    </div>
+                    <div>
+                        <span class="label_type">制片国家/地区: </span>
+                        <span class="label_data">{{ movie.country }}</span>
+                    </div>
+                    <div>
+                        <span class="label_type">语言: </span>
+                        <span class="label_data">{{ movie.language }}</span>
+                    </div>
+                    <div>
+                        <span class="label_type">上映日期: </span>
+                        <span class="label_data">{{ movie.release_date }}</span>
+                    </div>
+                    {% if movie.length %}
+                    <div>
+                        <span class="label_type">片长: </span>
+                        <span class="label_data">{{ movie.length }}分钟</span>
+                    </div>
+                    {% endif %}
+                    {% if movie.also_called %}
+                    <div>
+                        <span class="label_type">又名: </span>
+                        <span class="label_data">{{ movie.also_called }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-2" style="text-align: center">
+                <span class="label_type">豆瓣评分</span><br>
+                <span style="color: #494949;font-size: 28px;">{{ movie.score }}</span><br>
+                <span style="color: #3377AA;font-size: 16px;">{{ movie.evaluators_count }}人评价</span>
+            </div>
+        </div>
+
+    </div>
+
+    {% if movie.synopsis[0] != '' %}
+        <div style="margin-top: 30px; margin-left: 50px;" class="row">
+            <div class="col-md-2">
+                <span class="description-title">剧情简介</span>
+            </div>
+        </div>
+        <div style="margin-top:15px; margin-left: 50px; color: #333;" class="row">
+            {% for item in movie.synopsis %}
+            <div class="col-md-11">
+                <p class="" style="text-indent: 30px;">{{ item }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if movie.video_pictures %}
+    <div style="margin-top: 30px; margin-left: 50px;" class="row">
+        <div class="col-md-2">
+            <span class="description-title">剧情图片</span>
+        </div>
+    </div>
+    <div style="margin-top:15px; margin-left: 50px; color: #333;" class="row">
+        <div class="col-md-11">
+        {% for item in movie.video_pictures %}
+            <span><img style="width: 115px; height: 115px;" src="{{ item }}" alt=""></span>
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if movie.awards %}
+    <div style="margin-top: 30px; margin-left: 50px;" class="row">
+        <div class="col-md-2">
+            <span class="description-title">获奖情况</span>
+        </div>
+    </div>
+    <div style="margin-top:15px; margin-left: 50px; color: #333;" class="row">
+        <div class="col-md-11">
+        {% for item in movie.awards %}
+            <span>{{ item }}</span><br>
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if movie.awards %}
+    <div style="margin-top: 30px; margin-left: 50px;" class="row">
+        <div class="col-md-2">
+            <span class="description-title">资源下载</span>
+        </div>
+    </div>
+    <div style="margin-top:15px; margin-left: 50px; color: #333;" class="row">
+        <div class="col-md-11">
+        {% for item in movie.awards %}
+            <span>{{ item }}</span><br>
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='3rd/remodal.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/book-detail.js') }}"></script>
+{% endblock %}

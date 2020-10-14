@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pending.css')}}">
+    <style type="text/css">
+    #wallpaper_list a {
+        color: #333;
+    }
+    #wallpaper_list a:hover {
+        color: red;
+        text-decoration: underline;
+    }
+    .wallpaper_title {
+        float: left;
+        font-size: 13px;
+        margin-left: 20px;
+        width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .wallpaper_type {
+        height: 34px;
+        padding: 0 12px;
+        border-bottom: 1px solid #e0e0e0;
+        line-height: 34px;
+        font-size: 16px;
+        font-weight: 700;
+        background-position: 0 0;
+        background-repeat: repeat-x;
+        background-color: #F8F8F8;
+        text-align: center;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+     <h3 class="col-md-8 col-lg-offset-1">壁纸专题排行榜</h3>
+    <div style="margin-left: 26px; border: none; background-color: #F2F5F7;" class="col-md-10 col-lg-offset-1">
+        <hr style="padding: 0;">
+        <div class="col-md-12" style="margin-top: -20px;">
+            {% for wallpaper in wallpapers %}
+            <div class="col-md-5" style="margin: 0 20px 10px 40px; padding: 0; border: 1px solid #e0e0e0; background-color: white;">
+                <p class="wallpaper_type">{{ wallpaper.type }}</p>
+                {% for item in wallpaper.special %}
+                <div id="wallpaper_list">
+                   <a href="{{ url_for('web.wallpaper_detail', wid=item.index) }}">
+                       <p class="wallpaper_title">{{ item.title }}</p>
+                   </a>
+                   <span style="color: #999; font-size: 13px; margin-right: 20px; float: right;">{{ item.count }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

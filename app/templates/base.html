@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+
+{% block title %}
+    <title>虫聚</title>
+{% endblock %}
+
+{% block head %}
+    <meta name="referrer" content="never">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='3rd/ui/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="shortcut icon"
+          href="{{ url_for('static', filename='images/icon.png') }}">
+{% endblock %}
+
+<body>
+{% block navbar %}
+    <div class="nav-self">
+        <div style="padding-top: inherit" class="container">
+             <form class="form-inline" action="{{ url_for('web.search') }}" method="get">
+{#            <form class="form-inline" action="#" method="get">#}
+                <div class="flex-vertical-center-height">
+                    <div class="col-md-2">
+                        <img src="{{url_for('static', filename='images/logo-chongju.png')}}"/>
+                    </div>
+                    <div style="" class="col-md-8 input-group">
+{#                        <h3 style="color: #1bc6a5; text-align: center">一个汇聚全方位爬虫小项目的平台</h3>#}
+                        <select name="type" class="form-control" style="width: 128px;">
+                            <option value="0">影视</option>
+                            <option value="1">短视频</option>
+                            <option value="2">招聘</option>
+                            <option value="3">壁纸</option>
+                        </select>
+                        <input name="q" type="text" placeholder="ISBN、图书名称"
+                               class="form-control" style="width: 442px;">
+                        <span class="input-group-btn">
+                            <input class="btn btn-search" type="submit" value="搜索"/>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="sub-nav flex-vertical-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                    <a id="recent" href="{{ url_for('web.index') }}"
+                       class="flex-vertical-hor-center">
+                        <img src="{{ url_for('static', filename='images/yingshi.png') }}"/>
+                        <span id="ying">影视介绍</span>
+                    </a>
+                </div>
+                <div class="col-md-2">
+{#<!--                    <a id="gifts" href="{{ url_for('web.my_gifts') }}"-->#}
+                    <a id="gifts" href="#"
+                       class="flex-vertical-hor-center">
+                        <img src="{{ url_for('static', filename='images/duanshipin.png') }}"/>
+                        <span>短小视频</span>
+                    </a>
+                </div>
+                <div class="col-md-2">
+{#<!--                    <a id="wishes" href="{{ url_for('web.my_wish') }}"-->#}
+                    <a id="wishes" href="#"
+                       class="flex-vertical-hor-center">
+                        <img src="{{ url_for('static', filename='images/job.png') }}"/>
+                        <span>招聘信息</span>
+                    </a>
+                </div>
+                <div class="col-md-2">
+                   <a id="pending" href="{{ url_for('web.wallpaper_top') }}"
+                       class="flex-vertical-hor-center">
+                        <img src="{{ url_for('static', filename='images/bizhi.png') }}"/>
+                        <span>桌面壁纸</span>
+                    </a>
+                </div>
+                <div class="col-md-2">
+{#<!--                    <a id="pending" href="{{ url_for('web.pending') }}"-->#}
+                    <a id="wx" href="#"
+                       class="flex-vertical-hor-center">
+                        <img src="{{ url_for('static', filename='images/bizhi.png') }}"/>
+                        <span>微信骚操</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="application/javascript">
+        function change(id_name) {
+            $("#" + id_name).css('color', 'red')
+            alert(window.location.pathname)
+        }
+    </script>
+    <div class="container-height flex-vertical-center float-menu">
+        {% if not current_user.is_authenticated %}
+            <div style="float:right">-->
+                <a href="{{ url_for('web.login') }}">登录</a>
+                <a style="margin-left: 40px;" href="{{ url_for('web.register') }}">注册</a>
+            </div>
+        {% else %}
+            <a href="#">{{ current_user.nickname }}</a>
+            <a style="margin-left: 40px;" href="{{ url_for('web.logout') }}">注销</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+<div class='container'>
+    <div style="position: relative;">
+        {% block content %} {% endblock %}
+    </div>
+    <div style="position: absolute; top: 60px; left: 564px;" class="row">
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                {% if message %}
+                    <div class="alert alert-warning" role="alert">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
+        {% if form and form.errors %}
+            {% for key, error in form.errors.items() %}
+                <div style="color: red; text-align: center;
+                     font-size: 16px; margin: 0 0 8px 0;"
+                     class="show_error">{{ error[0] }}</div>
+            {% endfor %}
+            <script>
+                setInterval(function () {
+                    $('.show_error').hide()
+                }, 3000)
+            </script>
+        {% endif %}
+    </div>
+</div>
+
+<div class="flex-hor-center" style="color: #9a9b9c; margin: 80px 0 40px 0;">
+    <span>© 2020-2021 chongju.com created by zjl</span>
+</div>
+</body>
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='3rd/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+    <script>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+{% endblock %}
+
+</html>

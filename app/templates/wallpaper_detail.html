@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pending.css')}}">
+    <style type="text/css">
+        .active {
+            background-color: #f60;
+            color: white !important;
+            font-weight: 700;
+        }
+        .wallpaper_type a {
+            display: block;
+            color: #333;
+            width: 125px;
+            margin-left: -15px;
+            border-left: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
+        }
+        .wallpaper_type a:hover {
+            background-color: #f60;
+            color: white;
+            font-weight: 700;
+        }
+        .wallpaper_down {
+            background: #fff;
+            line-height: 34px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .all {
+            display: block;
+            color: #333;
+            width: 125px;
+            margin-left: -15px;
+        }
+        ul li {
+            list-style: none;
+            display: inline;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+     <h3 class="col-md-8 col-lg-offset-1">{{ wallpaper.title }}</h3>
+    <div style="margin-left: 26px; border: none; background-color: #F2F5F7;" class="col-md-10 col-lg-offset-1">
+        <hr style="padding: 0;">
+        <dl class="wallpaper_down col-md-2" style="margin-top: -20px;">
+            <span class="all" style="border: 1px solid #e0e0e0; background-color: #f5f5f5; font-weight: 700;">壁纸下载:</span>
+            <span class="wallpaper_type">
+                {% for item in size_list %}
+                    {% if item == win_size %}
+                        <a id="{{ item }}" onclick="add_link('{{ item }}')" href="javascript:void(0)" class="active" title="您当前的电脑屏幕尺寸为{{ item }}">{{ item }}</a>
+                    {% else %}
+                        <a id="{{ item }}" onclick="add_link('{{ item }}')" href="javascript:void(0)">{{ item }}</a>
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </dl>
+        <div class="col-md-10" style="margin-top: -20px;">
+            <ul class="row">
+                {% for item in wallpaper_img %}
+                <li style="position: relative; margin: 0 20px 10px 20px;">
+                    <span id="show_img">
+                        <a href="http://desk.zol.com.cn/showpic/{{ win_size }}{{ item.max_index }}.html" title="点击图片预览样式" target="_blank">
+                            <span>
+                                <img style="margin-bottom: 10px;" src="{{ item.min_url }}" alt="" />
+                            </span>
+                        </a>
+                    </span>
+                    <span id="download_img">
+                        <a href="{{ url_for('web.download_file', size=win_size, index=wallpaper.index, url_index=item.max_index) }}" target="_self" title="下载该图片">
+                            <span style="position: absolute; top: 26px; right: 8px;">
+                                <img style="width: 14px; height: 14px;" src="{{ url_for('static', filename='images/download.jpg')}}" alt="下载该图片">
+                            </span>
+                        </a>
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <script type="application/javascript">
+
+        function add_link(id_name) {
+            $(".wallpaper_type a").each(function () {
+                $(this).removeClass('active')
+            })
+            $("#" + id_name).addClass('active')
+            let arr_1 = '', arr_2 = ''
+            $("ul li #show_img a").each(function () {
+                let href = $(this).attr('href')
+                let arr = href.split("_");
+                arr_1 = arr[1]
+                arr_2 = arr[2].split(".")[0]
+                let new_href = 'http://desk.zol.com.cn/showpic/' + id_name + '_' + arr_1 + '_' + arr_2 + '.html'
+                $(this).attr('href', new_href)
+            })
+            $("ul li #download_img a").each(function () {
+                let new_href = "http://localhost:82/uploads?size=" + id_name + "&index={{ wallpaper.index }}&url_index=_" + arr_1 + "_" + arr_2
+                $(this).attr('href', new_href)
+            })
+        }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css')}}">
+    <style type="text/css">
+　　　　ul,li{list-style:none;}
+　　</style>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+        </div>
+    </div>
+    <div id="books" class="row">
+
+        <h3 class="col-md-8 col-lg-offset-1">豆瓣电影 Top 250</h3>
+        <ul id="movie_collection">
+            {% for movie in recent %}
+            <li>
+                <div style="margin: 0; border: none; background-color: #F2F5F7; margin-top: 10px;" class="col-md-9 col-lg-offset-1">
+                    <hr style="padding: 0">
+                    <div style="margin-top: -18px;">
+                        <div class="col-md-3">
+                            <span style="width: 34px; text-align: right; font-size: 18px; color: #bbb; position: absolute; top: 0; left: 16px;">{{ movie.ranking }}</span>
+                            <a href="{{ url_for('web.movie_detail', vid=movie.vid) }}">
+                                <img style="width: 100px; height: 148px; margin-left: 50px;" src="{{ movie.img }}" referrerPolicy="no-referrer">
+                            </a>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="hd" style="font-size: 14px; color: #669">
+                                <a href="{{ url_for('web.movie_detail', vid=movie.vid) }}" >
+                                    <span>{{ movie.name }}</span>
+                                </a>
+                            </div>
+                            <p></p>
+                            <div class="bd">
+                                <p>{{ movie.human_data }}</p>
+                                <p>{{ movie.release_time }}&nbsp;/&nbsp;{{ movie.show_country }}&nbsp;/&nbsp;{{ movie.type }}</p>
+
+                                <div class="star">
+                                    <span class="rating5-t">评分：</span>
+                                    <span class="rating_num" style="font-size: 12px; color: orange">{{ movie.score }}</span>
+                                    <span style="font-size: 12px; color: orange">&nbsp;&nbsp;&nbsp;&nbsp;{{ movie.evaluators_count }}</span>
+                                    <span>人评价</span>
+                                </div><p></p>
+                                <p class="quote">
+                                    <span class="inq">致语：{{ movie.title }}</span>
+                                </p>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+    <script type="application/javascript">
+        let scroll_count = 1
+        window.onscroll = function(){
+            //变量scrollTop是滚动条滚动时，距离顶部的距离
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //变量windowHeight是可视区的高度
+            const windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            //变量scrollHeight是滚动条的总高度
+            const scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
+            //滚动条到底部的条件
+            if(scrollTop + windowHeight === scrollHeight){
+                $.ajax({
+                    url: "{{ url_for('web.movie_top') }}",
+                    type: "POST",
+                    data: {'page': scroll_count},
+                    success:function(data){
+                        for (let i in data) {
+                            let add_html = '<li>\n' +
+                                '                <div style="margin: 0; border: none; background-color: #F2F5F7; margin-top: 10px;" class="col-md-9 col-lg-offset-1">\n' +
+                                '                    <hr style="padding: 0">\n' +
+                                '                    <div style="margin-top: -18px;">\n' +
+                                '                        <div class="col-md-3">\n' +
+                                '                            <span style="width: 34px; text-align: right; font-size: 18px; color: #bbb; position: absolute; top: 0; left: 16px;">' + data[i].ranking + '</span>\n' +
+                                '                            <img style="width: 100px; height: 148px; margin-left: 50px;" referrerPolicy="no-referrer" src="' + data[i].img + '">\n' +
+                                '                        </div>\n' +
+                                '                        <div class="col-md-9">\n' +
+                                '                            <div class="hd" style="font-size: 14px; color: #669">\n' +
+                                '                                <a href="#" >\n' +
+                                '                                    <span>' + data[i].name + '</span>\n' +
+                                '                                </a>\n' +
+                                '                            </div>\n' +
+                                '                            <p></p>\n' +
+                                '                            <div class="bd">\n' +
+                                '                                <p>' + data[i].human_data + '</p>\n' +
+                                '                                <p>' + data[i].release_time + '&nbsp;/&nbsp;' + data[i].show_country + '&nbsp;/&nbsp;' + data[i].type + '</p>\n' +
+                                '\n' +
+                                '                                <div class="star">\n' +
+                                '                                    <span class="rating5-t">评分：</span>\n' +
+                                '                                    <span class="rating_num" style="font-size: 12px; color: orange">' + data[i].score + '</span>\n' +
+                                '                                    <span style="font-size: 12px; color: orange">&nbsp;&nbsp;&nbsp;&nbsp;' + data[i].evaluators_count + '</span>\n' +
+                                '                                    <span>人评价</span>\n' +
+                                '                                </div><p></p>\n' +
+                                '                                <p class="quote">\n' +
+                                '                                    <span class="inq">致语：' + data[i].title + '</span>\n' +
+                                '                                </p>\n' +
+                                '                            </div>\n' +
+                                '                         </div>\n' +
+                                '                    </div>\n' +
+                                '                </div>\n' +
+                                '            </li>'
+                            $('#movie_collection').append(add_html)
+                            {#console.log(data[i])#}
+                        }
+                    },
+                    error: function(err) {
+                        console.log("获取失败");
+                    }
+                })
+                console.log('请求页: ' + scroll_count)
+                scroll_count += 1
+            }
+        }
+    </script>
+{% endblock %}
+
